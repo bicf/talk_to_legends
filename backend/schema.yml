@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: Talk to Legends API
+  version: 1.0.0
+  description: API for chatting with historical legends using LLMs.
+paths:
+  /api/chat/session/{session_id}:
+    get:
+      operationId: getSession
+      description: Get session details and messages history.
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - chat
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+  /api/chat/session/{session_id}/message:
+    post:
+      operationId: sendMessage
+      description: Send a message to the legend and get a response.
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/Message'
+                  assistant:
+                    $ref: '#/components/schemas/Message'
+          description: Message sent and assistant response received.
+        '502':
+          description: LLM error.
+  /api/chat/session/{session_id}/start:
+    post:
+      operationId: chat_session_start_create
+      description: Create (or no-op if exists) a chat session with a specific legend.
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartSessionRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+  /api/setting/legends:
+    get:
+      operationId: listLegends
+      description: Get a list of all available historical legends.
+      tags:
+      - setting
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Legend'
+          description: ''
+components:
+  schemas:
+    Legend:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+      required:
+      - id
+      - name
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created_at
+      - id
+      - role
+    RoleEnum:
+      enum:
+      - user
+      - assistant
+      type: string
+      description: |-
+        * `user` - user
+        * `assistant` - assistant
+    SendMessageRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+      required:
+      - content
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        legend_id:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - legend_id
+      - messages
+    StartSessionRequest:
+      type: object
+      properties:
+        legend_id:
+          type: string
+          minLength: 1
+      required:
+      - legend_id
+  securitySchemes:
+    noAuth:
+      type: http
+      scheme: none

@@ -1,0 +1,16 @@
+name: "talk-to-legends"
+services:
+  ttl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - talk-to-legends
+    command: /start.sh
+    ports:
+      - "8000:80"
+    networks:
+      - ttl-net
+
+networks:
+  ttl-net:
