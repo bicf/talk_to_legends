@@ -40,6 +40,7 @@ COPY Caddyfile /etc/caddy/Caddyfile
 EXPOSE 80
 
 # 9. Start everything
+ENV ALLOWED_HOSTS="*"
 COPY ./start.sh /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
