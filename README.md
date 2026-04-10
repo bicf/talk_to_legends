@@ -32,6 +32,41 @@ docker build -t talk-to-legends .
 docker run -p 8000:80 talk-to-legends
 ```
 
+#### Da Docker Hub
+L'immagine ufficiale è disponibile su Docker Hub. Puoi scaricarla ed eseguirla senza buildarla localmente:
+```bash
+# Pull dell'immagine da Docker Hub
+docker pull fortyeightthousand/talk_to_legends:v1.0
+
+# Avvio del container
+docker run -p 8000:80 fortyeightthousand/talk_to_legends:v1.0
+```
+
+#### Con Docker Desktop
+Se preferisci usare l'interfaccia grafica di **Docker Desktop** (disponibile per Windows, macOS e Linux), segui questi passaggi:
+
+1. **Installa Docker Desktop**: scaricalo da [docker.com](https://www.docker.com/products/docker-desktop/) e avvialo.
+2. **Cerca l'immagine**: nella barra di ricerca in alto seleziona la tab **Images** oppure **Docker Hub** e cerca `fortyeightthousand/talk_to_legends`.
+3. **Pull dell'immagine**: clicca sul pulsante **Pull** in corrispondenza del tag `v1.0`.
+4. **Avvia il container**:
+   - Vai nella tab **Images** e individua `fortyeightthousand/talk_to_legends:v1.0`.
+   - Clicca sul pulsante **Run** (icona ▶️).
+   - Espandi la sezione **Optional settings** e configura:
+     - **Container name**: `talk-to-legends` (opzionale).
+     - **Host port**: `8000`.
+     - **Container port**: `80`.
+   - Clicca su **Run** per avviare il container.
+5. **Verifica lo stato**: nella tab **Containers** vedrai il container in esecuzione. Da qui potrai avviarlo, fermarlo, visualizzare i log e accedere al terminale.
+
+### 🌐 Avvio nel Browser
+Una volta avviato il container (con uno qualsiasi dei metodi sopra descritti), apri il tuo browser e vai all'indirizzo:
+
+```
+http://localhost:8000
+```
+
+L'interfaccia di **Talk to Legends** sarà pronta per l'uso. Dalla barra laterale puoi configurare il provider LLM e iniziare a chattare con i personaggi storici.
+
 ---
 
 ## ⚙️ Configurazione LLM nell'App
